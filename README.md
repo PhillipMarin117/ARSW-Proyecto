@@ -1,5 +1,5 @@
 # 🐦 Super Flappy Bird 🐦
-![](img/Inicio.PNG)
+![](img/Titulo.PNG)
 
 ## 📚 Resumen 📚
 
