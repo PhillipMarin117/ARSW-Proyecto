@@ -45,6 +45,9 @@ Caso de uso Partidas:
 
 ![](img/Diagrama.PNG)
 
+Caso de uso Cuenta/Registro
+
+![](img/Cuenta.PNG)
 
 
 ## 🧾 Historias de usuario 🧾
@@ -52,32 +55,88 @@ Caso de uso Partidas:
 
 ### 1. Registro de usuarios
 
-COMO Usuario QUIERO Registrar mi nombre PARA PODER llevar un conteo de mi récord y el de mis amigos
+COMO Jugador QUIERO Registrarme PARA PODER ingresar al juego
 
 **Criterios de aceptación:**
 
--  Se debe contener un nombre cualquiera.
+-  El usuario se debe registrar con un nombre y una contraseña únicos, no es obligatorio
+- Si el usuario no desea registrarse de igual manera podrá ingresar al juego pero no obtendrá logros
+- El usuario debe tener un "Nombre" si este no tiene se le asignará un aleatorio
 
-### 2. Ingreso de usuarios
+### 2. Logros y Premios
 
-COMO Usuario QUIERO Ingresar PARA PODER poder jugar solo o con amigos
-
-**Criterios de aceptación:**
-
--  Se debe tener conexión a internet 
-
--  Se debe tener instalado cualquier navegador
-
-
-### 3. Iniciar una partida
-
-COMO Usuario QUIERO iniciar una partida PARA PODER medirme contra otro jugador en tiempo real.
+COMO Jugador QUIERO obtener logros y premios PARA PODER personalizar mi personaje
 
 **Criterios de aceptación:**
 
--  Se debe emparejar con otro usuario que haya ingresado a la pagina y haya ingresado algún nombre
+-  Para obtener logros debe cumplir ciertos hitos. Dichos hitos son: Completar mas de 5 partidas en solitario:
+	- Haberse Registrado
+	- Completar mas de 5 partidas en solitario
+	- Completar mas de 10 partidas en multijugador
+	- Haber jugado un mínimo de una (1) horas
+	- Haber logrado llegar al nivel 10
+	- Haber logrado llegar al nivel 20
+	- Haber logrado llegar al nivel 40
 
-- No se puede terminar una partida que está en ejecución hasta que uno de los dos falle.
+-  Los hitos otorgan puntos, que desbloquean personalizaciones para los personajes como lo son el cambio de color del personaje
+
+### 3. Logros obtenidos por el usuario
+
+COMO Jugador  QUIERO ver mi logros obtenidos PARA PODER reclamarlos y personalizar mi personaje
+
+**Criterios de aceptación:**
+
+-  El usuario debe estar registrado, de lo contrario no obtendrá logros
+
+-  Debe tener un mínimo de un (1) punto para desbloquear una personalización
+
+
+### 4. Personalización
+
+COMO Jugador  QUIERO personalizar mi personaje PARA PODER lucirlo y que se vea mas bonito
+
+**Criterios de aceptación:**
+
+-  Debe haber desbloqueado un logro o premio, para poder cambiar el color del personaje 
+
+-  La personalización se hace antes de ingresar a un juego
+
+### 5. Tiempo jugado
+
+COMO Jugador QUIERO conocer el tiempo jugado PARA PODER saber el acumulado de tiempo invertido
+
+**Criterios de aceptación:**
+
+-  El usuario debe estar registrado, allí se realizará la suma de todos los tiempos y se mostrará un historial de cada juego
+- Si el usuario no esta registrado el su tiempo no será guardado pero podrá conocerlo por medio del temporizador
+
+### 6. Creación de una sala
+COMO Jugador QUIERO conocer crear una sala PARA PODER entrar solo con personas que desee
+
+**Criterios de aceptación:**
+
+-  La sala debe tener un numero único
+- Solo se permiten números del 1 al 15
+- La sala no debe existir.
+
+### 7. Ingreso a una sala
+
+COMO Jugador QUIERO ingresar a una sala ya creada PARA PODER entrar solo con personas que desee
+
+**Criterios de aceptación:**
+
+- La sala debe existir.
+- No se puede ingresar mientras haya una partida en ejecución.
+- 
+### 8. Puntaje Global
+
+COMO Jugador QUIERO ingresar ver el puntaje global PARA PODER romper un récord
+
+**Criterios de aceptación:**
+
+- El jugador debe estar registrado
+- Se compara la cantidad de su puntaje y cuanto le falta
+- Se actualiza después de una partida
 
 
 ## 🔗 Acceso a Flappy Bird. 🔗
