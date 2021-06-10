@@ -17,7 +17,7 @@ Cómo se indicó anteriormente Flappy Birds es un juego que no cuenta con un mul
 Dentro de esta innovaciones ofrecemos una tabla de posiciones en donde podemos apreciar el top de los jugadores. Esta se estará actualizando constantemente a medida que cada jugador progrese en el juego.
 Esta modalidad será posible jugarla desde dos navegadores distintos y por aparte, no necesariamente desde un mismo pc si no lo desean.
 
-![](img/Navegadores.PNG)
+![](img/Navegador.PNG)
 
 ##  💻 Diseño de la aplicación 💻
 
