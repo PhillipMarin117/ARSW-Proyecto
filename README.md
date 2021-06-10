@@ -43,7 +43,7 @@ A continuación se presentan dos diagramas de la aplicación los cuales estan re
 
 Caso de uso Partidas:
 
-![](img/Diagrama.PNG)
+![](img/Partida.PNG)
 
 Caso de uso Cuenta/Registro
 
