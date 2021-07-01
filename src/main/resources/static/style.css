@@ -4,6 +4,14 @@
     position: absolute;
 }
 
+.borderLeft {
+    width: 60px;
+    height: 730px;
+    position: absolute;
+    background-color: white;
+    z-index: +1;
+}
+
 .sky{
     background-color: blue;
     width: 500px;
@@ -17,6 +25,7 @@
     height: 150px;
     position: absolute;
     top: 580px;
+    z-index: +1;
 }
 
 .bird{
@@ -27,7 +36,15 @@
 }
 
 .obstacle{
-    background-color: green;
+    background-image: url('../template/pipe.png');
+    width: 60px;
+    height: 300px;
+    position: absolute;
+}
+
+.topObstacle{
+    background-image: url('../template/pipe.png');
+    transform: rotate(180deg);
     width: 60px;
     height: 300px;
     position: absolute;
