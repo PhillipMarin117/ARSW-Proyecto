@@ -17,11 +17,25 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     let timerId = setInterval(startGame,20);
 
+    function control(e){
+        if (e.keyCode === 32){
+            jump()
+        }
+    }
+
     function jump(){
-        birdBottom += 50
+        if (birdBottom < 500) birdBottom += 50
         bird.style.bottom = birdBottom + 'px'
+        console.log(birdBottom)
      }
-     document.addEventListener('keyup', jump)
+     document.addEventListener('keyup', control)
+
+     function generateObstacle(){
+         const obstacle = document.createElement('div')
+         obstacle.classList.add('obstacle')
+         gameDisplay.appendChild(obstacle)
+     }
+     generateObstacle()
 
 
 
