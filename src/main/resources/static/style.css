@@ -92,11 +92,12 @@
 }
 
 .sky{
-    /*background-image: url('../template/background.png')*/
+    /*background-image: url('../template/background.png');*/
     background-color: blue;
     width: 500px;
     height: 580px;
     position: absolute;
+
 }
 
 .ground{
