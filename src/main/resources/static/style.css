@@ -10,6 +10,12 @@
     top: 200px;
 }
 
+.tittle-game{
+    background-image: url('../template/tittleFlappy.png');
+    position: absolute;
+
+}
+
 /**/
 .border-left-sup{
     width: 82px;
