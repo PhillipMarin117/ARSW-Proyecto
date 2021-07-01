@@ -1,18 +1,65 @@
+.body{
+    display: flex;
+}
+
 .game-container {
     width: 500px;
     height: 730px;
     position: absolute;
+    left: 80px;
+    top: 150px;
 }
 
-.borderLeft {
-    width: 60px;
-    height: 730px;
+.border-left{
+    width: 15px;
+    height: 790px;
     position: absolute;
     background-color: white;
-    z-index: +1;
+    z-index: +2;
+}
+
+.border-right{
+    width: 15px;
+    height: 790px;
+    position: absolute;
+    background-color: rgb(56, 13, 56);
+    z-index: +2;
+    left: 580px;
+    
+}
+
+.border-top-sup{
+    width: 660px;
+    height: 80px;
+    position: absolute;
+    background-color: #09122b;
+    z-index: +2;
+    bottom: 730px;
+
+}
+
+.border-top{
+    width: 660px;
+    height: 15px;
+    position: absolute;
+    background-color: #00a8f3;
+    z-index: +3;
+    bottom: 740px;
+
+}
+
+.border-bottom{
+    width: 660px;
+    height: 15px;
+    position: absolute;
+    background-color: #00a8f3;
+    z-index: +2;
+    top: 740px;
+
 }
 
 .sky{
+    /*background-image: url('../template/background.png')*/
     background-color: blue;
     width: 500px;
     height: 580px;
@@ -20,6 +67,7 @@
 }
 
 .ground{
+    /*background-image: url('../template/floor.png');*/
     background-color: brown;
     width: 500px;
     height: 150px;
@@ -29,21 +77,27 @@
 }
 
 .bird{
+    /*background-image: url('../template/bird.png');*/
     background-color: yellow;
     position: absolute;
     width: 60px;
     height: 45px;
+    left: 220px;
+    bottom: 100px;
 }
 
 .obstacle{
-    background-image: url('../template/pipe.png');
+    /*background-image: url('../template/pipe.png');*/
+    background-color: green;
     width: 60px;
     height: 300px;
     position: absolute;
+
 }
 
 .topObstacle{
-    background-image: url('../template/pipe.png');
+    /*background-image: url('../template/pipe.png');*/
+    background-color: green;
     transform: rotate(180deg);
     width: 60px;
     height: 300px;
