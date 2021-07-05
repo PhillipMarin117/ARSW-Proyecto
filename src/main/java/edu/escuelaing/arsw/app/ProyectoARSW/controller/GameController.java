@@ -9,7 +9,7 @@ public class GameController {
 
     @GetMapping("/game")
     @ResponseBody
-    public String status() {
+    public String game() {
         return "index";
     }
 

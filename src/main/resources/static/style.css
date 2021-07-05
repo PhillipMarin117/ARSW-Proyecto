@@ -92,8 +92,8 @@
 }
 
 .sky{
-    /*background-image: url('../template/background.png');*/
-    background-color: blue;
+    background-image: url('img/background.png');
+    /*background-color: blue;*/
     width: 500px;
     height: 580px;
     position: absolute;
@@ -101,8 +101,8 @@
 }
 
 .ground{
-    /*background-image: url('../template/floor.png');*/
-    background-color: brown;
+    background-image: url('img/floor.png');
+    /*background-color: brown;*/
     width: 500px;
     height: 150px;
     position: absolute;
@@ -111,8 +111,8 @@
 }
 
 .bird{
-    /*background-image: url('../template/bird.png');*/
-    background-color: yellow;
+    background-image: url('img/bird.png');
+    /*background-color: yellow;*/
     position: absolute;
     width: 60px;
     height: 45px;
@@ -121,8 +121,8 @@
 }
 
 .obstacle{
-    /*background-image: url('../template/pipe.png');*/
-    background-color: green;
+    background-image: url('img/pipe.png');
+    /*background-color: green;*/
     width: 60px;
     height: 300px;
     position: absolute;
@@ -130,10 +130,24 @@
 }
 
 .topObstacle{
-    /*background-image: url('../template/pipe.png');*/
-    background-color: green;
+    background-image: url('img/pipe.png');
+    /*background-color: green;*/
     transform: rotate(180deg);
     width: 60px;
     height: 300px;
     position: absolute;
 }
+
+
+
+.ground-moving {
+    position: absolute;
+    top: 580px;
+    height: 150px;
+    background-image: url('floor.png');
+    background-repeat: repeat-x;
+    animation: slideright 100s infinite linear;
+    -webkit-animation: slideright 100s infinite linear;
+    width: 100%;
+    z-index: +1;
+  }

@@ -81,6 +81,36 @@ document.addEventListener('DOMContentLoaded', () => {
          console.log('Game Over Mi Pana')
          isGameOver = true
          document.removeEventListener('keyup', control)
+         const resul = {
+             puntaje: 10,
+             nombre: 'Feliponsio' 
+         }
+         $.ajax({
+            url : 'http://localhost:8080/save',
+            data : JSON.stringify(resul),
+            type : 'POST', //en este caso
+            ContentType : 'application/json',
+            success : function(response){
+                alert("funciona bien");
+            },
+            error: function(error){
+                alert("No funciona: ",  error);
+            }
+        });
+        /*var data = $.ajax({
+            url: "https://backendservicioseci.herokuapp.com/login/",
+            //url: "http://localhost:8080/login/",
+            type: "POST",
+            data: JSON.stringify(loginRequest),
+            contentType: "application/json",
+            headers: {
+                "Content-Type": "application/json",
+                "Access-Control-Allow-Origin": "*",
+            },
+            error: function (request){
+                alert(request.responseText);
+            }
+        });*/
      }
 
 
