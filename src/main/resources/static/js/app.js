@@ -1,8 +1,68 @@
+const profanityBaseURL = "https://www.purgomalum.com/service/plain?text=";
+const nickNamesDictionary = [
+  "pink crow",
+  "green pigeon",
+  "brown robin",
+  "blue woodpecker",
+  "purple sparrow",
+  "yellow kingfisher",
+  "gray warbler",
+  "orange bulbul",
+  "black drongo",
+  "red seagulls",
+  "beige flamingo",
+  "frost eagles",
+  "fuscia owl",
+  "mint kite",
+  "hickory parakeet",
+  "tortilla beeeater",
+  "wood munia",
+  "violet dove",
+  "eggplant peacock",
+  "golden oriole",
+  "magenta flycatcher",
+  "mulberry quail",
+  "slate magpie",
+  "navy roller",
+  "azure emu",
+  "arctic sunbird",
+  "iris starling",
+  "olive rockthrush",
+  "pecan barnowl",
+  "carob goose",
+  "coal duck",
+  "grease trogon",
+  "raven nightjar",
+  "sepia barbet",
+];
+let obstacleTimers = [];
+let gameStarted = false;
+let gameTimerId;
+let myScore = 0;
+let highScore = 0;
+let highScoreNickname = "anonymous panda";
+let myNickname;
+
+if (localStorage.getItem("flappy-nickname")) {
+  myNickname = localStorage.getItem("flappy-nickname");
+} else {
+  myNickname = nickNamesDictionary[Math.floor(Math.random() * 34)];
+  localStorage.setItem("flappy-nickname", myNickname);
+}
+
+/**/
+
 document.addEventListener('DOMContentLoaded', () => {
     console.log('Porfa, carga cosa del demonio')
     const bird = document.querySelector('.bird')
     const gameDisplay = document.querySelector('.game-container')
     const ground = document.querySelector ('.ground')
+    let nicknameInput = document.getElementById("nickname-input");
+    let updateNicknameBtn = document.getElementById("update-nickname");
+    let scoreLabel = document.getElementById("score-label");
+    let topScoreLabel = document.getElementById("top-label");
+    let scoreList = document.getElementById("score-list");
+
 
     let birdLeft = 220;
     let birdBottom = 100;
@@ -97,20 +157,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 alert("No funciona: ",  error);
             }
         });
-        /*var data = $.ajax({
-            url: "https://backendservicioseci.herokuapp.com/login/",
-            //url: "http://localhost:8080/login/",
-            type: "POST",
-            data: JSON.stringify(loginRequest),
-            contentType: "application/json",
-            headers: {
-                "Content-Type": "application/json",
-                "Access-Control-Allow-Origin": "*",
-            },
-            error: function (request){
-                alert(request.responseText);
-            }
-        });*/
      }
 
 
