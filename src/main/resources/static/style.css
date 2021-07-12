@@ -5,7 +5,7 @@
 }
 
 input {
-    font-family: inherit;
+    font-family: "VT323",monospace;
     padding: 6px 8px;
     border-radius: 10px;
     font-size: 16px;
@@ -25,28 +25,28 @@ button {
     border-radius: 10px;
     text-decoration: none;
     font-size: 16px;
-    font-family: inherit;
+    font-family: "VT323",monospace;
     color: black;
     background-color: #a349a4;
     cursor: pointer;
 }
 
 button:hover {
-    background-color: #423036;
+    background-color: #88318a;
 }
   
 button:active {
-    background-color: #423036;
+    background-color: #b73cb9;
 }
 
 /**/
 .rightSection {
-    width: calc(100% - 60px - 500px);
-    height: 100vh;
-    position: absolute;
-    background-color: white;
+    width: calc(80% - 60px - 620px);
+    height: 80vh;
+    position: relative;
+    background-color: #09122b;
     z-index: +1;
-    left: 560px;
+    left: 670px;
     top: 0px;
 }
 
@@ -58,9 +58,14 @@ button:active {
     top: 200px;
 }
 
-.tittle-game{
-    background-image: url('../template/tittleFlappy.png');
+.tittle-game{/*Super flappy bird*/
+    background-image: url('img/tittleFlappy.png');
+    width: 1020px;
+    height: 145px;
     position: absolute;
+    z-index: +3;
+    top: 21px;
+    left: 345px;/*53*/
 
 }
 
@@ -109,7 +114,7 @@ button:active {
  /**/
 .border-top-sup{
     width: 662px;
-    height: 60px;
+    height: 200px;
     position: absolute;
     background-color: #09122b;
     z-index: +2;
@@ -145,8 +150,14 @@ button:active {
     width: 500px;
     height: 580px;
     position: absolute;
+    /*top: 60px;*/
     z-index: -1;/**/
 
+}
+
+.ground-container {
+    width: 500px;
+    height: 150px;
 }
 
 .ground{
@@ -156,18 +167,20 @@ button:active {
     height: 150px;
     position: absolute;
     top: 580px;
-    z-index: +1;
+    z-index: -1;
 }
 
 .ground-moving {
     position: absolute;
-    top: 630px;
-    height: 580px;
+    top: 780px;
+    height: 150px;
+    width: 500px;
     background-image: url("img/floor.png");
     background-repeat: repeat-x;
     animation: slideright 100s infinite linear;
     -webkit-animation: slideright 100s infinite linear;
-    min-width: 100%;
+    min-width: 38%;
+    /*z-index: -1;*/
 }
 
 .bird{
@@ -208,20 +221,6 @@ button:active {
     position: absolute;
 }
 
-
-
-.ground-moving {
-    position: absolute;
-    top: 580px;
-    height: 150px;
-    background-image: url('floor.png');
-    background-repeat: repeat-x;
-    animation: slideright 100s infinite linear;
-    -webkit-animation: slideright 100s infinite linear;
-    width: 100%;
-    z-index: +1;
-  }
-
 @keyframes slideright {
     from {
         background-position: 10000%;
@@ -240,11 +239,11 @@ button:active {
     }
 }
 
-.title {
+.title { /*Good Luck !!*/
     margin: 60px 20px 20px;
-    color: #533c44;
-    font-size: 4vw;
-    text-shadow: 2px 2px #dadada;
+    color: red;
+    font-size: 3.5vw;
+    text-shadow: 2px 2px #054226;
     text-align: center;
     width: 600px;
 }
@@ -253,13 +252,14 @@ button:active {
     margin: 0px 20px 0px;
     text-align: center;
     width: 600px;
-    font-size: 25px;
+    font-size: 20px;
+    color: whitesmoke;
 }
 
 .my-info {
     display: flex;
-    justify-content: center;
-    width: 600px;
+    justify-content:center;
+    width: 630px;
 }
 
 .nickname {
@@ -269,7 +269,8 @@ button:active {
 }
 
 .my-score {
-    font-size: 22px;
+    font-family: "VT323",monospace;
+    font-size: 25px;
     margin-top: 1%;
     color: white;
 }
@@ -277,16 +278,16 @@ button:active {
 .scoreboard {
     position: relative;
     max-width: 450px;
-    margin: 20px 20px 20px 80px;
+    margin: 10px 20px 20px 80px;
     padding: 20px;
     background-color: #2dbb4d;
-    background-image: url(top-right-brown.png), url(top-left-brown.png),
-      url(bottom-right-brown.png), url(bottom-left-brown.png);
+    background-image: url(img/top-right-brown.png), url(img/top-left-brown.png),
+      url(img/bottom-right-brown.png), url(img/bottom-left-brown.png);
     background-position: top right, top left, bottom right, bottom left;
     background-repeat: no-repeat;
 }
 
-.scoreboard:before {
+.scoreboard:before { /*Margen Superior e inferior*/
     content: "";
     position: absolute;
     top: 0px;
@@ -299,7 +300,7 @@ button:active {
     z-index: 1;
 }
   
-  .scoreboard:after {
+.scoreboard:after { /*Margen derecho e izquierdo*/
     content: "";
     position: absolute;
     top: 10px;
@@ -312,20 +313,21 @@ button:active {
     z-index: 1;
 }
 
-.score-title {
+.score-title { /*Tabla de posiciones*/
     margin: 0 0 0;
     font-family: "VT323", monospace;
     font-size: 3em;
     text-align: center;
     color: #077388;
-    text-shadow: 2px 2px #20a260;
+    text-shadow: 3px 3px #20a260;
 }
 
 .top-score {
+    font-family: "VT323",monospace;
     text-align: center;
     margin: 0px 20px;
-    font-size: 20px;
-    color: #8e4691;
+    font-size: 21px;
+    color: #3d53c0;
 }
 
 .score-list {

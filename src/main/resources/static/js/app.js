@@ -40,7 +40,7 @@ let gameStarted = false;
 let gameTimerId;
 let myScore = 0;
 let highScore = 0;
-let highScoreNickname = "anonymous panda";
+let highScoreNickname = "anonymous bro";
 let myNickname;
 
 if (localStorage.getItem("flappy-nickname")) {
@@ -120,11 +120,11 @@ document.addEventListener('DOMContentLoaded', () =>{ /*console.log('Porfa, carga
      /*document.addEventListener('keyup', control)*/
 
 
-     function generateObstacle(){
+     function generateObstacles() {
         if (!isGameOver) {
             let obstacleLeft = 500;
-            let obstacleBottom = Math.random() * 60;
-      
+            let obstacleBottom = Math.random() * 130;
+
             const obstacle = document.createElement("div");
             const topObstacle = document.createElement("div");
             obstacle.classList.add("obstacle");
@@ -137,37 +137,38 @@ document.addEventListener('DOMContentLoaded', () =>{ /*console.log('Porfa, carga
             topObstacle.style.bottom = obstacleBottom + gap + "px";
             let timerId = setInterval(moveObstacle, 20);
             obstacleTimers.push(timerId);
+            
             function moveObstacle() {
-              obstacleLeft -= 2;
-              obstacle.style.left = obstacleLeft + "px";
-              topObstacle.style.left = obstacleLeft + "px";
-              if (obstacleLeft === 220) {
-                myScore++;
-                scoreLabel.innerHTML = "Score: " + myScore;
-              }
-              if (obstacleLeft === -50) {
-                clearInterval(timerId);
-                gameDisplay.removeChild(obstacle);
-                gameDisplay.removeChild(topObstacle);
-              }
-              if (
-                (obstacleLeft > 200 &&
-                  obstacleLeft < 280 &&
-                  birdLeft === 220 &&
-                  (birdBottom < obstacleBottom + 210 ||
-                    birdBottom > obstacleBottom + gap - 150)) ||
-                birdBottom === 0
-              ) {
+                obstacleLeft -= 2;
+                obstacle.style.left = obstacleLeft + "px";
+                topObstacle.style.left = obstacleLeft + "px";
+                if (obstacleLeft === 220) {
+                    myScore++;
+                    scoreLabel.innerHTML = "Score: " + myScore;
+                }
+                if (obstacleLeft === -60) {
+                    clearInterval(timerId);
+                    gameDisplay.removeChild(obstacle);
+                    gameDisplay.removeChild(topObstacle);
+                }
+                if (
+                    (obstacleLeft > 200 &&
+                        obstacleLeft < 280 &&
+                        birdLeft === 220 &&
+                        (birdBottom < obstacleBottom + 150 ||
+                        birdBottom > obstacleBottom + gap - 200)) ||
+                    birdBottom === 0
+                ) {
                 for (timer in obstacleTimers) {
-                  clearInterval(obstacleTimers[timer]);
+                    clearInterval(obstacleTimers[timer]);
                 }
                 gameOver();
                 isGameOver = true;
-              }
+                }
             }
             setTimeout(generateObstacles, 3000);
-          }
-        }
+    }
+  }
 
      function gameOver(){
         scoreLabel.innerHTML += " | Game Over";
@@ -196,15 +197,9 @@ document.addEventListener('DOMContentLoaded', () =>{ /*console.log('Porfa, carga
                 alert("No YES funciona: ",  error);
             }
         });*/
-     }
-
-
-
-
-
-    const loki = document.getElementById('abcd')
+    }
+    /*const loki = document.getElementById('abcd')
     loki.addEventListener('click', () => {
         console.log('Sigo sin saber que')
-    })
-
+    })*/
 })

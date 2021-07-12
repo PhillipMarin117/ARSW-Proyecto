@@ -4,44 +4,56 @@
     <meta charset="utf-8">
     <title>Flappy Bird</title>
     <link rel="stylesheet" href="style.css">
+    <link rel="icon" href="img/favicon.ico" type="image/x-icon">
+    <link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="js/app.js" charset="utf-8"></script>
   </head>
     <div>
       <ul>
-        <img src="img/tittleFlappy.png" alt="SuperFlappyBirds" height="130" width="780"/>
+        <img src="img/backgroundTittle.png" alt="SuperFlappyBirds" height="130" width="780"/>
       </ul>
     </div>
 
     <body style="background-color:#09122b">
+        <div class="tittle-game" height="130" width="780"></div>
         <div class="border-left"></div>
         <div class="border-left-sup"></div>
-        <div class="game-container">
-          <div class="border-top"></div>
-          <div class="border-top-sup"></div>
+          <div class="game-container">
+            <div class="border-top"></div>
+            <div class="border-top-sup"></div>
             <div class="sky">
                 <div class="bird"></div>
             </div>
-            <div class="border-bottom"></div>
-            <div class="ground"></div>
-        </div>
+              <div class="border-bottom"></div>
+              <div class="ground"></div>
+          </div>
+
         <div class="border-right-sup"></div>
         <div class="border-right"></div>
 
-        <h1 
-          style="position:absolute; left: 700px;; top:150px; color: #bcd2f2;"> 
-            Funciona Cosa del Demonio !! 👿
-        </h1>
-        <input 
-          type="text" 
-          name="Introduce tu name prro" 
-          style="position:absolute; left: 750px; top:250px;" 
-          value="Introduce tu name prro"/>
-
-        <button  
-          id="abcd" 
-          style="position:absolute; left: 1000px;; top:250px;"> 
-            Hola mundo jeje XD
-        </button>
+        <div class="rightSection">
+          <h1 class="title">¡¡ GOOD LUCK !! 👿</h1>
+          <p class="instruction">Dale click dentro del area del juego, usa la barra espaciadora para SALTAR !!</p>
+          <div class="my-info">
+            <div class="nickname">
+              <input id="nickname-input" maxlength="18"></input>
+              <button id="update-nickname">Actualiza tu Name prro</button>
+            </div>
+            <div class="my-score">
+              <p id="score-label">Score: 0</p>
+            </div>
+          </div>
+          
+          <div class="scoreboard">
+            <h2 class="score-title">Tabla de Posiciones</h2>
+            <div class="top-score">
+              <p id="top-label"></p>
+            </div>
+            <ul id="score-list" class="score-list">
+            </ul>
+          </div>
+        </div>
+        <div class="ground-moving"></div>
     </body>
 </html>
