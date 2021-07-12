@@ -50,10 +50,7 @@ if (localStorage.getItem("flappy-nickname")) {
   localStorage.setItem("flappy-nickname", myNickname);
 }
 
-/**/
-
-document.addEventListener('DOMContentLoaded', () => {
-    console.log('Porfa, carga cosa del demonio')
+document.addEventListener('DOMContentLoaded', () =>{ /*console.log('Porfa, carga cosa del demonio')*/
     const bird = document.querySelector('.bird')
     const gameDisplay = document.querySelector('.game-container')
     const ground = document.querySelector ('.ground')
@@ -63,81 +60,123 @@ document.addEventListener('DOMContentLoaded', () => {
     let topScoreLabel = document.getElementById("top-label");
     let scoreList = document.getElementById("score-list");
 
-
     let birdLeft = 220;
-    let birdBottom = 100;
+    let birdBottom = 350;
     let gravity = 2;
     let isGameOver = false;
-    let gap = 430;
+    let gap = 450;
 
+    const filterNickname = async (nicknameText) => {
+        const http = new XMLHttpRequest();
+        let encodedText = encodeURIComponent(nicknameText);
+        http.open("GET", profanityBaseURL + encodedText + "&fill_text=***");
+        http.send();
+        http.onload = () => {
+          myNickname = http.responseText;
+          nicknameInput.value = myNickname;
+          localStorage.setItem("flappy-nickname", myNickname);
+        };
+      };
 
+    topScoreLabel.innerHTML =
+      "Top score - " + highScore + "pts by " + highScoreNickname;
+    nicknameInput.value = myNickname;
+    updateNicknameBtn.addEventListener("click", () => {
+      filterNickname(nicknameInput.value);
+    });  
+
+    window.addEventListener("keydown", function (e) {
+        if (e.keyCode == 32 && e.target == document.body) {
+          e.preventDefault();
+        }
+      });
+
+    gameDisplay.onclick = function () {
+        if (!gameStarted) {
+          gameStarted = true;
+          document.addEventListener("keydown", control);
+          gameTimerId = setInterval(startGame, 20);
+          generateObstacles();
+        }
+      };
 
     function startGame(){
         birdBottom -= gravity
         bird.style.bottom = birdBottom + 'px'
         bird.style.left = birdLeft +'px'
     }
-    let gametimerId = setInterval(startGame,20);
+    /*let gametimerId = setInterval(startGame,20);*/
 
     function control(e){
-        if (e.keyCode === 32){
+        if (e.keyCode === 32 && !isGameOver){
             jump()
         }
     }
 
     function jump(){
-        if (birdBottom < 500) birdBottom += 50
-        bird.style.bottom = birdBottom + 'px'
-        console.log(birdBottom)
+        if (birdBottom < 500) birdBottom += 50;
+        bird.style.bottom = birdBottom + "px";
      }
-     document.addEventListener('keyup', control)
+     /*document.addEventListener('keyup', control)*/
 
 
      function generateObstacle(){
-         let obstacleLeft =  500
-         let randomHeight = Math.random()*60
-         let obstacleBottom = randomHeight
-         const obstacle = document.createElement('div')
-         const topObstacle = document.createElement('div')
-         if (!isGameOver) {
-             obstacle.classList.add('obstacle')
-             topObstacle.classList.add('topObstacle')
-         }     
-         gameDisplay.appendChild(obstacle)
-         gameDisplay.appendChild(topObstacle)
-         obstacle.style.left = obstacleLeft + 'px'
-         topObstacle.style.left = obstacleLeft + 'px'
-         obstacle.style.bottom = obstacleBottom + 'px'
-         topObstacle.style.bottom = obstacleBottom + gap +'px'
-
-
-         function moveObstacle(){
-             obstacleLeft -=  2
-             obstacle.style.left =obstacleLeft + 'px'
-             topObstacle.style.left = obstacleLeft + 'px'
-
-             if(obstacleLeft === -60){
-                 clearInterval(timerId)
-                 gameDisplay.removeChild(obstacle)
-                 gameDisplay.removeChild(topObstacle)
-
-             }
-             if (
-                obstacleLeft > 200 && obstacleLeft < 280 && birdLeft === 220 &&
-                (birdBottom < obstacleBottom + 150 || birdBottom > obstacleBottom + gap -200)||
-                birdBottom === 0){
-                 gameOver()
-                 clearInterval(timerId)
-             }
-
-         }
-         let timerId = setInterval(moveObstacle, 20)
-         if (!isGameOver) setTimeout(generateObstacle, 3000)
-     }
-     generateObstacle()
+        if (!isGameOver) {
+            let obstacleLeft = 500;
+            let obstacleBottom = Math.random() * 60;
+      
+            const obstacle = document.createElement("div");
+            const topObstacle = document.createElement("div");
+            obstacle.classList.add("obstacle");
+            topObstacle.classList.add("topObstacle");
+            gameDisplay.appendChild(obstacle);
+            gameDisplay.appendChild(topObstacle);
+            obstacle.style.left = obstacleLeft + "px";
+            obstacle.style.bottom = obstacleBottom + "px";
+            topObstacle.style.left = obstacleLeft + "px";
+            topObstacle.style.bottom = obstacleBottom + gap + "px";
+            let timerId = setInterval(moveObstacle, 20);
+            obstacleTimers.push(timerId);
+            function moveObstacle() {
+              obstacleLeft -= 2;
+              obstacle.style.left = obstacleLeft + "px";
+              topObstacle.style.left = obstacleLeft + "px";
+              if (obstacleLeft === 220) {
+                myScore++;
+                scoreLabel.innerHTML = "Score: " + myScore;
+              }
+              if (obstacleLeft === -50) {
+                clearInterval(timerId);
+                gameDisplay.removeChild(obstacle);
+                gameDisplay.removeChild(topObstacle);
+              }
+              if (
+                (obstacleLeft > 200 &&
+                  obstacleLeft < 280 &&
+                  birdLeft === 220 &&
+                  (birdBottom < obstacleBottom + 210 ||
+                    birdBottom > obstacleBottom + gap - 150)) ||
+                birdBottom === 0
+              ) {
+                for (timer in obstacleTimers) {
+                  clearInterval(obstacleTimers[timer]);
+                }
+                gameOver();
+                isGameOver = true;
+              }
+            }
+            setTimeout(generateObstacles, 3000);
+          }
+        }
 
      function gameOver(){
-         clearInterval(gametimerId)
+        scoreLabel.innerHTML += " | Game Over";
+        clearInterval(gameTimerId);
+        isGameOver = true;
+        document.removeEventListener("keydown", control);
+        ground.classList.add("ground");
+        ground.classList.remove("ground-moving");
+         /*clearInterval(gametimerId)
          console.log('Game Over Mi Pana')
          isGameOver = true
          document.removeEventListener('keyup', control)
@@ -154,9 +193,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 alert("funciona bien");
             },
             error: function(error){
-                alert("No funciona: ",  error);
+                alert("No YES funciona: ",  error);
             }
-        });
+        });*/
      }
 
 
