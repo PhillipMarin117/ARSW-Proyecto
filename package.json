@@ -16,5 +16,10 @@
   "bugs": {
     "url": "https://github.com/PhillipMarin117/ARSW-Proyecto/issues"
   },
-  "homepage": "https://github.com/PhillipMarin117/ARSW-Proyecto#readme"
+  "homepage": "https://github.com/PhillipMarin117/ARSW-Proyecto#readme",
+  "dependencies": {
+    "ably": "^1.2.10",
+    "dotenv": "^10.0.0",
+    "express": "^4.17.1"
+  }
 }
