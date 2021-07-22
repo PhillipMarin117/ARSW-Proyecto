@@ -42,6 +42,13 @@ let myScore = 0;
 let highScore = 0;
 let highScoreNickname = "anonymous bro";
 let myNickname;
+let myClientId;
+let myPublishChannel;
+let gameChannel;
+let gameChannelName = "flappy-game";
+let allBirds = {};
+let topScoreChannel;
+let topScoreChannelName = "flappy-top-score";
 
 if (localStorage.getItem("flappy-nickname")) {
   myNickname = localStorage.getItem("flappy-nickname");
@@ -50,7 +57,12 @@ if (localStorage.getItem("flappy-nickname")) {
   localStorage.setItem("flappy-nickname", myNickname);
 }
 
+const realtime = new Ably.Realtime({
+  authUrl: "/auth",
+});
+
 document.addEventListener('DOMContentLoaded', () =>{ /*console.log('Porfa, carga cosa del demonio')*/
+    const sky = document.querySelector('.sky')
     const bird = document.querySelector('.bird')
     const gameDisplay = document.querySelector('.game-container')
     const ground = document.querySelector ('.ground')
@@ -66,140 +78,269 @@ document.addEventListener('DOMContentLoaded', () =>{ /*console.log('Porfa, carga
     let isGameOver = false;
     let gap = 450;
 
-    const filterNickname = async (nicknameText) => {
-        const http = new XMLHttpRequest();
-        let encodedText = encodeURIComponent(nicknameText);
-        http.open("GET", profanityBaseURL + encodedText + "&fill_text=***");
-        http.send();
-        http.onload = () => {
-          myNickname = http.responseText;
-          nicknameInput.value = myNickname;
-          localStorage.setItem("flappy-nickname", myNickname);
-        };
+  const filterNickname = async (nicknameText) => {
+      const http = new XMLHttpRequest();
+      let encodedText = encodeURIComponent(nicknameText);
+      http.open("GET", profanityBaseURL + encodedText + "&fill_text=***");
+      http.send();
+      http.onload = () => {
+        myNickname = http.responseText;
+        nicknameInput.value = myNickname;
+        localStorage.setItem("flappy-nickname", myNickname);
       };
+  };
 
-    topScoreLabel.innerHTML =
-      "Top score - " + highScore + "pts by " + highScoreNickname;
-    nicknameInput.value = myNickname;
-    updateNicknameBtn.addEventListener("click", () => {
-      filterNickname(nicknameInput.value);
-    });  
+  topScoreLabel.innerHTML =
+    "Top score - " + highScore + "pts by " + highScoreNickname;
+  nicknameInput.value = myNickname;
+  updateNicknameBtn.addEventListener("click", () => {
+    filterNickname(nicknameInput.value);
+  });  
 
-    window.addEventListener("keydown", function (e) {
-        if (e.keyCode == 32 && e.target == document.body) {
-          e.preventDefault();
-        }
-      });
+  window.addEventListener("keydown", function (e) {
+      if (e.keyCode == 32 && e.target == document.body) {
+        e.preventDefault();
+      }
+  });
 
+  realtime.connection.once("connected", () => {
+    myClientId = realtime.auth.clientId; //saltado este no
+    myPublishChannel = realtime.channels.get("bird-position-" + myClientId);
+    topScoreChannel = realtime.channels.get(topScoreChannelName, {
+      params: { rewind: 1 }, //lo ultimo va a ser el topscore
+    });
+    topScoreChannel.subscribe((msg) => {
+      highScore = msg.data.score;
+      highScoreNickname = msg.data.nickname;
+      topScoreLabel.innerHTML =
+        "Top score - " + highScore + "pts by " + highScoreNickname;
+      topScoreChannel.unsubscribe();
+    });
+    gameChannel = realtime.channels.get(gameChannelName);
+    console.log("este es el gameChannel: ",gameChannel);
     gameDisplay.onclick = function () {
-        if (!gameStarted) {
-          gameStarted = true;
-          document.addEventListener("keydown", control);
-          gameTimerId = setInterval(startGame, 20);
-          generateObstacles();
+      if (!gameStarted) {
+        gameStarted = true;
+        gameChannel.presence.enter({
+          nickname: myNickname,
+        });
+        sendPositionUpdates();
+        showOtherBirds();
+        document.addEventListener("keydown", control);
+        gameTimerId = setInterval(startGame, 20);
+      }
+    };
+  });
+
+  /*gameDisplay.onclick = function () {
+      if (!gameStarted) {
+        gameStarted = true;
+        document.addEventListener("keydown", control);
+        gameTimerId = setInterval(startGame, 20);
+        generateObstacles();
+      }
+    };*/
+
+  function startGame(){
+      birdBottom -= gravity
+      bird.style.bottom = birdBottom + 'px'
+      bird.style.left = birdLeft +'px'
+      for (item in allBirds) {
+        if (allBirds[item].targetBottom) {
+          let tempBottom = parseInt(allBirds[item].el.style.bottom);
+          tempBottom += (allBirds[item].targetBottom - tempBottom) * 0.5;
+          allBirds[item].el.style.bottom = tempBottom + "px";
         }
-      };
+      }
+  }
+  /*let gametimerId = setInterval(startGame,20);*/
 
-    function startGame(){
-        birdBottom -= gravity
-        bird.style.bottom = birdBottom + 'px'
-        bird.style.left = birdLeft +'px'
-    }
-    /*let gametimerId = setInterval(startGame,20);*/
+  function control(e){
+      if (e.keyCode === 32 && !isGameOver){
+          jump()
+      }
+  }
 
-    function control(e){
-        if (e.keyCode === 32 && !isGameOver){
-            jump()
-        }
-    }
-
-    function jump(){
-        if (birdBottom < 500) birdBottom += 50;
-        bird.style.bottom = birdBottom + "px";
-     }
-     /*document.addEventListener('keyup', control)*/
+  function jump(){
+      if (birdBottom < 500) birdBottom += 50;
+      bird.style.bottom = birdBottom + "px";
+  }
+  /*document.addEventListener('keyup', control)*/
 
 
-     function generateObstacles() {
-        if (!isGameOver) {
-            let obstacleLeft = 500;
-            let obstacleBottom = Math.random() * 130;
+  function generateObstacles() {
+    if (!isGameOver) {
+      console.log("Entrando en el generate");
+        let obstacleLeft = 500;
+        let obstacleBottom = Math.random() * 130;
 
-            const obstacle = document.createElement("div");
-            const topObstacle = document.createElement("div");
-            obstacle.classList.add("obstacle");
-            topObstacle.classList.add("topObstacle");
-            gameDisplay.appendChild(obstacle);
-            gameDisplay.appendChild(topObstacle);
+        const obstacle = document.createElement("div");
+        const topObstacle = document.createElement("div");
+        obstacle.classList.add("obstacle");
+        topObstacle.classList.add("topObstacle");
+        gameDisplay.appendChild(obstacle);
+        gameDisplay.appendChild(topObstacle);
+        obstacle.style.left = obstacleLeft + "px";
+        obstacle.style.bottom = obstacleBottom + "px";
+        topObstacle.style.left = obstacleLeft + "px";
+        topObstacle.style.bottom = obstacleBottom + gap + "px";
+        let timerId = setInterval(moveObstacle, 20);
+        obstacleTimers.push(timerId);
+        
+        function moveObstacle() {
+            obstacleLeft -= 2;
             obstacle.style.left = obstacleLeft + "px";
-            obstacle.style.bottom = obstacleBottom + "px";
             topObstacle.style.left = obstacleLeft + "px";
-            topObstacle.style.bottom = obstacleBottom + gap + "px";
-            let timerId = setInterval(moveObstacle, 20);
-            obstacleTimers.push(timerId);
-            
-            function moveObstacle() {
-                obstacleLeft -= 2;
-                obstacle.style.left = obstacleLeft + "px";
-                topObstacle.style.left = obstacleLeft + "px";
-                if (obstacleLeft === 220) {
-                    myScore++;
-                    scoreLabel.innerHTML = "Score: " + myScore;
-                }
-                if (obstacleLeft === -60) {
-                    clearInterval(timerId);
-                    gameDisplay.removeChild(obstacle);
-                    gameDisplay.removeChild(topObstacle);
-                }
-                if (
-                    (obstacleLeft > 200 &&
-                        obstacleLeft < 280 &&
-                        birdLeft === 220 &&
-                        (birdBottom < obstacleBottom + 150 ||
-                        birdBottom > obstacleBottom + gap - 200)) ||
-                    birdBottom === 0
-                ) {
-                for (timer in obstacleTimers) {
-                    clearInterval(obstacleTimers[timer]);
-                }
-                gameOver();
-                isGameOver = true;
-                }
+            if (obstacleLeft === 220) {
+              myScore++;
+              setTimeout(() => {
+                sortLeaderboard();
+              }, 400);
             }
-            setTimeout(generateObstacles, 3000);
+            if (obstacleLeft === -60) {
+                clearInterval(timerId);
+                gameDisplay.removeChild(obstacle);
+                gameDisplay.removeChild(topObstacle);
+            }
+            if (
+                (obstacleLeft > 200 &&
+                    obstacleLeft < 280 &&
+                    birdLeft === 220 &&
+                    (birdBottom < obstacleBottom + 150 ||
+                    birdBottom > obstacleBottom + gap - 200)) ||
+                birdBottom === 0
+            ) {
+            for (timer in obstacleTimers) {
+                clearInterval(obstacleTimers[timer]);
+            }
+            sortLeaderboard();
+            gameOver();
+            isGameOver = true;
+            }
+        }
+      setTimeout(generateObstacles, 17000);
     }
   }
 
-     function gameOver(){
-        scoreLabel.innerHTML += " | Game Over";
-        clearInterval(gameTimerId);
-        isGameOver = true;
-        document.removeEventListener("keydown", control);
-        ground.classList.add("ground");
-        ground.classList.remove("ground-moving");
-         /*clearInterval(gametimerId)
-         console.log('Game Over Mi Pana')
-         isGameOver = true
-         document.removeEventListener('keyup', control)
-         const resul = {
-             puntaje: 10,
-             nombre: 'Feliponsio' 
-         }
-         $.ajax({
-            url : 'http://localhost:8080/save',
-            data : JSON.stringify(resul),
-            type : 'POST', //en este caso
-            ContentType : 'application/json',
-            success : function(response){
-                alert("funciona bien");
-            },
-            error: function(error){
-                alert("No YES funciona: ",  error);
+  function gameOver(){
+    scoreLabel.innerHTML += " | Game Over";
+    clearInterval(gameTimerId);
+    isGameOver = true;
+    document.removeEventListener("keydown", control);
+    ground.classList.add("ground");
+    ground.classList.remove("ground-moving");
+    gameChannel.presence.leave();
+    //gameChannel.detach();
+    realtime.connection.close();
+      /*clearInterval(gametimerId)
+      console.log('Game Over Mi Pana')
+      isGameOver = true
+      document.removeEventListener('keyup', control)
+      const resul = {
+          puntaje: 10,
+          nombre: 'Feliponsio' 
+      }
+      $.ajax({
+        url : 'http://localhost:8080/save',
+        data : JSON.stringify(resul),
+        type : 'POST', //en este caso
+        ContentType : 'application/json',
+        success : function(response){
+            alert("funciona bien");
+        },
+        error: function(error){
+            alert("No YES funciona: ",  error);
+        }
+    });*/
+  }
+
+  /*const loki = document.getElementById('abcd')
+  loki.addEventListener('click', () => {
+      console.log('Sigo sin saber que')
+  })*/
+
+  function sendPositionUpdates() {
+    let publishTimer = setInterval(() => {
+      myPublishChannel.publish("pos", {
+        bottom: parseInt(bird.style.bottom),
+        nickname: myNickname,
+        score: myScore,
+      });
+      if (isGameOver) {
+        clearInterval(publishTimer);
+        myPublishChannel.detach();
+      }
+    }, 100);
+  }
+
+  function showOtherBirds() {
+    console.log("Entrando en el show other bird");
+    gameChannel.subscribe("game-state", (msg) => {
+      for (let item in msg.data.birds) {
+        if (item != myClientId) {
+          let newBottom = msg.data.birds[item].bottom;
+          let newLeft = msg.data.birds[item].left;
+          let isDead = msg.data.birds[item].isDead;
+          if (allBirds[item] && !isDead) {
+            allBirds[item].targetBottom = newBottom;
+            allBirds[item].left = newLeft;
+            allBirds[item].isDead = msg.data.birds[item].isDead;
+            allBirds[item].nickname = msg.data.birds[item].nickname;
+            allBirds[item].score = msg.data.birds[item].score;
+          } else if (allBirds[item] && isDead) {
+            sky.removeChild(allBirds[item].el);
+            delete allBirds[item];
+          } else {
+            if (!isGameOver && !isDead) {
+              allBirds[item] = {};
+              allBirds[item].el = document.createElement("div");
+              allBirds[item].el.classList.add("other-bird");
+              sky.appendChild(allBirds[item].el);
+              allBirds[item].el.style.bottom = newBottom + "px";
+              allBirds[item].el.style.left = newLeft + "px";
+              allBirds[item].isDead = msg.data.birds[item].isDead;
+              allBirds[item].nickname = msg.data.birds[item].nickname;
+              allBirds[item].score = msg.data.birds[item].score;
             }
-        });*/
+          }
+        } else if (item === myClientId) {
+          allBirds[item] = msg.data.birds[item];
+        }
+      }
+      if (msg.data.highScore > highScore) {
+        highScore = msg.data.highScore;
+        highScoreNickname = msg.data.highScoreNickname;
+        topScoreLabel.innerHTML =
+          "Top score - " + highScore + "pts by " + highScoreNickname;
+      }
+      if (msg.data.launchObstacle === true && !isGameOver) {
+        console.log("mensaje emergente: ", msg);
+        generateObstacles(msg.data.obstacleHeight);
+      }
+    });
+  }
+
+  function sortLeaderboard() {
+    scoreLabel.innerHTML = "Score: " + myScore;
+    let listItems = "";
+    let leaderBoard = new Array();
+    for (let item in allBirds) {
+      leaderBoard.push({
+        nickname: allBirds[item].nickname,
+        score: allBirds[item].score,
+      });
     }
-    /*const loki = document.getElementById('abcd')
-    loki.addEventListener('click', () => {
-        console.log('Sigo sin saber que')
-    })*/
-})
+    leaderBoard.sort((a, b) => {
+      b.score - a.score;
+    });
+    leaderBoard.forEach((bird) => {
+      listItems +=
+        "<li class='score-item'><span class='name'>" +
+        bird.nickname +
+        "</span><span class='points'>" +
+        bird.score +
+        "pts</span></li>";
+    });
+    scoreList.innerHTML = listItems;
+  }
+});

@@ -13,4 +13,12 @@ public class GameController {
         return "index";
     }
 
+    public String authentication(){
+
+        return  "auth";
+
+    }
+
+
+
 }

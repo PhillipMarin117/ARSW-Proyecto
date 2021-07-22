@@ -3,11 +3,17 @@
   <head>
     <meta charset="utf-8">
     <title>Flappy Bird</title>
-    <link rel="stylesheet" href="style.css">
     <link rel="icon" href="img/favicon.ico" type="image/x-icon">
     <link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css"
+          integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk="
+          crossorigin="anonymous" />
+    <script lang="text/javascript" src="https://cdn.ably.io/lib/ably.min-1.js"></script>
+
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="js/app.js" charset="utf-8"></script>
+    <script src="https://cdn.ably.io/lib/vcdiff-decoder.min-1.js"></script>
   </head>
     <div>
       <ul>
@@ -19,7 +25,7 @@
         <div class="tittle-game" height="130" width="780"></div>
         <div class="border-left"></div>
         <div class="border-left-sup"></div>
-          <div class="game-container">
+          <div id="game-container" class="game-container">
             <div class="border-top"></div>
             <div class="border-top-sup"></div>
             <div class="sky">
@@ -55,5 +61,6 @@
           </div>
         </div>
         <div class="ground-moving"></div>
+    <script src="js/borrar.js" charset="utf-8"></script>
     </body>
 </html>
